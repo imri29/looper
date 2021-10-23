@@ -1,7 +1,14 @@
-import { Box } from "./AudioBox.style";
+import { Box } from './AudioBox.style';
+import useAudio from '../hooks/useAudio';
 
-function AudioBox() {
-  return <Box />;
+function AudioBox({ url }) {
+  const [playing, toggleSound] = useAudio(url);
+
+  return (
+    <Box onClick={toggleSound} playing={playing}>
+      {playing ? 'pause' : 'play'}
+    </Box>
+  );
 }
 
 export default AudioBox;
