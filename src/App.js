@@ -1,26 +1,19 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import AudioBox from './components/AudioBox';
 import { LooperBox, Container } from './App.style';
-import * as soundModules from './sounds';
 import './index.css';
+import { AudioContext } from './context/AudioProvider';
 
 function App() {
-  // const [matrix, setMatrix] = useState(new Array(9).fill(<AudioBox />));
-  const [power, setPower] = useState(true)
-  const sounds = Object.values(soundModules);
-
-  const togglePower = () => {
-    setPower(!power)
-  }
-
+  const { sounds, togglePower, power } = useContext(AudioContext);
 
   return (
     <Container>
       <button onClick={togglePower}>{power ? 'off' : 'on'}</button>
       <LooperBox>
-        {new Array(9).fill('').map((_, i) => {
-          const url = sounds[i];
-          return <AudioBox url={url} key={url} power={power} />;
+        {sounds?.map((_, i) => {
+          const { id, isOn } = sounds[i];
+          return <AudioBox id={id} key={id} power={power} isOn={isOn} />;
         })}
       </LooperBox>
     </Container>
