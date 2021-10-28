@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { useCallback, createContext, useEffect, useState } from 'react';
 import * as soundModules from '../sounds';
 
 export const AudioContext = createContext();
@@ -15,34 +15,52 @@ const AudioProvider = ({ children }) => {
   const [power, setPower] = useState(true);
 
   const toggleSound = id => {
-    const activateAndPlaySound = sound =>
-      sound.id === id
-        ? { ...sound, isOn: !sound.isOn, isPlaying: power ? !sound.isPlaying : false }
-        : sound;
+    const activateAndPlaySound = sound => {
+      if (sound.id === id) {
+        if (power) {
+          toggleIndividualSound(sound);
+          return { ...sound, isOn: !sound.isOn, isPlaying: !sound.isPlaying };
+        } else {
+          return { ...sound, isOn: !sound.isOn, isPlaying: false };
+        }
+      } else {
+        return sound;
+      }
+    };
     setSounds(sounds.map(activateAndPlaySound));
   };
 
+  const toggleIndividualSound = sound =>
+    sound.isPlaying ? sound.audio.play() : sound.audio.pause();
+
   const togglePower = () => {
     setPower(!power);
-
-    setSounds(
-      sounds.map(sound => {
-        if (sound.isOn) {
-          return { ...sound, isPlaying: !power };
-        } else {
-          return sound;
-        }
-      })
-    );
+    setSounds(sounds.map(sound => (sound.isOn ? { ...sound, isPlaying: !power } : sound)));
+    toggleAllAudio();
   };
 
-  const playAudio = id => {
-    if (sounds.length) {
-      const track = sounds.find(track => track.id === id);
-      track?.audio?.play();
-      track?.audio.addEventListener('ended', e => console.log('ended', id, e));
-    }
-  };
+  /*  TODO
+
+   *  toggle delay between sounds
+   *
+   * */
+
+  const toggleAllAudio = useCallback(() => {
+    sounds.forEach(sound => {
+      const { audio } = sound;
+      if (sound.isPlaying) {
+        audio.play();
+        // audio.loop = true;
+        audio.onended = () => console.log('ENDED')
+      } else {
+        audio.pause();
+      }
+    });
+  }, [sounds]);
+
+  useEffect(() => {
+    toggleAllAudio();
+  }, [toggleAllAudio, sounds]);
 
   const value = {
     sounds,
@@ -50,7 +68,7 @@ const AudioProvider = ({ children }) => {
     power,
     toggleSound,
     togglePower,
-    playAudio,
+    toggleAllAudio,
   };
 
   return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>;

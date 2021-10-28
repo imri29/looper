@@ -4,7 +4,7 @@ import useAudio from '../hooks/useAudio';
 import { AudioContext } from '../context/AudioProvider';
 
 function AudioBox({ url, id, isOn }) {
-  const { power, sounds, toggleSound } = useContext(AudioContext);
+  const { power, sounds, toggleSound, playAudio } = useContext(AudioContext);
 
   const onClick = id => {
     toggleSound(id);
