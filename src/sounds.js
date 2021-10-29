@@ -8,4 +8,18 @@ import sound7 from './assets/loops/7-hk_top125_latint.mp3';
 import sound8 from './assets/loops/8-hk_top125_zulu.mp3';
 import sound9 from './assets/loops/9-hk_mus125_lovefunk2_Gm.mp3';
 
-export { sound1, sound2, sound3, sound4, sound5, sound6, sound7, sound8, sound9 };
+const soundModules =  [
+  { url: sound1, name: 'Filo Kick Clap' },
+  { url: sound2, name: 'Funkdirt' },
+  { url: sound3, name: 'Sun Synth Bass' },
+  { url: sound4, name: 'Frisco' },
+  { url: sound5, name: 'Pickcut' },
+  { url: sound6, name: 'Holdme' },
+  { url: sound7, name: 'Latint' },
+  { url: sound8, name: 'Zulu' },
+  { url: sound9, name: 'Lovefunk 2' },
+];
+
+export default soundModules;
+
+// export { sound1, sound2, sound3, sound4, sound5, sound6, sound7, sound8, sound9 };

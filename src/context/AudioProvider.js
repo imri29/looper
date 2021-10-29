@@ -1,13 +1,14 @@
 import { createContext, useState, useRef } from 'react';
-import * as soundModules from '../sounds';
+import soundModules from '../sounds';
 
 export const AudioContext = createContext();
 
 const AudioProvider = ({ children }) => {
   const sounds = useRef(
-    Object.values(soundModules).map((url, i) => ({
-      audio: new Audio(url),
+    soundModules.map((item, i) => ({
+      audio: new Audio(item.url),
       id: i + 1,
+      name: item.name,
     }))
   );
   const [power, setPower] = useState(true);

@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { Box } from './AudioBox.style';
 import { AudioContext } from '../context/AudioProvider';
 
-function AudioBox({ id, audioEl }) {
+function AudioBox({ id, audioEl, name }) {
   const { handleQueue, activeTracks, isPlaying, setIsPlaying, power } = useContext(AudioContext);
   const isBoxActive = activeTracks.some(trackId => trackId === id);
 
@@ -37,7 +37,7 @@ function AudioBox({ id, audioEl }) {
 
   return (
     <Box onClick={() => onClick(id)} playing={isBoxActive}>
-      <span>{isBoxActive ? 'pause' : 'play'}</span>
+      <span>{name}</span>
     </Box>
   );
 }
