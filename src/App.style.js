@@ -14,5 +14,4 @@ export const LooperBox = styled.div`
   justify-content: center;
   width: 550px;
   gap: 10px;
-  //border: 1px solid darkseagreen;
 `;
