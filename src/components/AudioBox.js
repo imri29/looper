@@ -1,27 +1,30 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Box } from './AudioBox.style';
 import { AudioContext } from '../context/AudioProvider';
 
 function AudioBox({ id, audioEl }) {
   const { handleQueue, activeTracks, isPlaying, setIsPlaying, power } = useContext(AudioContext);
   const isBoxActive = activeTracks.some(trackId => trackId === id);
-  // const [waiting, setWaiting] = useState(false);
 
   useEffect(() => {
+    if (!power) {
+      audioEl.pause();
+      setIsPlaying(false);
+    }
     audioEl.onended = () => setIsPlaying(false);
-  }, [audioEl, setIsPlaying]);
+  }, [audioEl, setIsPlaying, power]);
 
   useEffect(() => {
-    setTimeout(async () => {
-      if (!isPlaying && isBoxActive) {
-
-        setIsPlaying(true);
-        audioEl.currentTime = 0;
-
-        await audioEl.play();
-      }
-    }, 1);
-  }, [audioEl, isBoxActive, isPlaying, setIsPlaying]);
+    if (power) {
+      setTimeout(async () => {
+        if (!isPlaying && isBoxActive) {
+          setIsPlaying(true);
+          audioEl.currentTime = 0;
+          await audioEl.play();
+        }
+      }, 1);
+    }
+  }, [audioEl, isBoxActive, isPlaying, setIsPlaying, power]);
 
   const onClick = id => {
     if (isBoxActive) {
@@ -34,8 +37,7 @@ function AudioBox({ id, audioEl }) {
 
   return (
     <Box onClick={() => onClick(id)} playing={isBoxActive}>
-      {isBoxActive ? 'pause' : 'play'}
-      {/*{waiting ? 'waiting' : ''}*/}
+      <span>{isBoxActive ? 'pause' : 'play'}</span>
     </Box>
   );
 }

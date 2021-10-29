@@ -11,8 +11,8 @@ function App() {
     <Container>
       <button onClick={togglePower}>{power ? 'off' : 'on'}</button>
       <LooperBox>
-        {sounds?.map((_, i) => {
-          const { id, audio } = sounds[i];
+        {sounds.current?.map((_, i) => {
+          const { id, audio } = sounds.current[i];
           return <AudioBox audioEl={audio} id={id} key={id} />;
         })}
       </LooperBox>

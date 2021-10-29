@@ -1,15 +1,13 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useRef } from 'react';
 import * as soundModules from '../sounds';
 
 export const AudioContext = createContext();
 
 const AudioProvider = ({ children }) => {
-  const [sounds, setSounds] = useState(
+  const sounds = useRef(
     Object.values(soundModules).map((url, i) => ({
       audio: new Audio(url),
       id: i + 1,
-      isOn: false,
-      isPlaying: false,
     }))
   );
   const [power, setPower] = useState(true);
@@ -17,23 +15,23 @@ const AudioProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handleQueue = id => {
-    if (activeTracks && activeTracks.includes(id)) {
+    if (activeTracks.includes(id)) {
       setActiveTracks(
         activeTracks.filter(trackId => {
           return trackId !== id;
         })
       );
-    } else setActiveTracks([...activeTracks, id]);
+    } else {
+      setActiveTracks([...activeTracks, id]);
+    }
   };
 
   const togglePower = () => {
     setPower(!power);
-    setSounds(sounds.map(sound => (sound.isOn ? { ...sound, isPlaying: !power } : sound)));
   };
 
   const value = {
     sounds,
-    setSounds,
     power,
     togglePower,
     handleQueue,

@@ -12,4 +12,9 @@ export const Box = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
+  border-radius: 5px;
+  transition: all 0.1s;
+  &:hover {
+    transform: scale(1.03);
+  }
 `;
