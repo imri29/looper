@@ -24,7 +24,7 @@ function AudioBox({ id, audioEl, name }) {
         }
       }, 1);
     }
-  }, [audioEl, isBoxActive, isPlaying, setIsPlaying, power]);
+  }, [audioEl, isBoxActive, isPlaying, power]);
 
   const onClick = id => {
     if (isBoxActive) {
