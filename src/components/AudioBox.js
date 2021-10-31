@@ -11,7 +11,13 @@ function AudioBox({ id, audioEl, name }) {
       audioEl.pause();
       setIsPlaying(false);
     }
-    audioEl.onended = () => setIsPlaying(false);
+    audioEl.ontimeupdate = function () {
+      const buffer = 0.2;
+      if (this.currentTime > this.duration - buffer) {
+        this.currentTime = 0;
+        setIsPlaying(false);
+      }
+    };
   }, [audioEl, setIsPlaying, power]);
 
   useEffect(() => {
@@ -30,7 +36,6 @@ function AudioBox({ id, audioEl, name }) {
     if (isBoxActive) {
       audioEl.pause();
       audioEl.currentTime = 0;
-      setIsPlaying(false);
     }
     handleQueue(id);
   };
